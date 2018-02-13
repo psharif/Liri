@@ -14,8 +14,6 @@ var spotify = new Spotify({
 
 //OMDB variables including Request
 var request = require("request");
-var movieTitle = "";
-var queryUrl = "http://www.omdbapi.com/?t=" + movieTitle + "&y=&plot=short&apikey=40e9cece";
 
 ///Gets Last 20 tweets and console logs them to the screen 
 function getTweets(){
@@ -57,7 +55,8 @@ function findSong(query){
 }
 
 function findMovie(query){
-  movieTitle = query;
+  var movieTitle = query;
+  var queryUrl = "http://www.omdbapi.com/?t=" + movieTitle + "&y=&plot=short&apikey=40e9cece";
   ///Makes Requests to OMDB to get Movie Data
   request(queryUrl, function(error, response, body) {
   
@@ -83,5 +82,3 @@ function findMovie(query){
       }
   });
 }
-
-findMovie("Garfield");
