@@ -1,16 +1,53 @@
-var twitterKeys = require("./keys.js");
+
+///Twitter API Variables 
 var Twitter = require("twitter");
-var request = require("request");
 var twitterKeys = require("./keys.js");
-
 var twitterClient = new Twitter(twitterKeys);
+var twitterParams = {screen_name: 'AliasPsharif', count: "20"};
 
-var params = {screen_name: 'AliasPsharif',
-			  count: "3"};
-twitterClient.get('statuses/user_timeline', params, function(error, tweets, response) {
-  if (!error) {
-    tweets.forEach(function(el){
-    	console.log(el.text);
-    });
-  }
+//Spotify Variables 
+var Spotify = require("node-spotify-api");
+var spotify = new Spotify({
+  id: "78f2d1b95cbb4295903f3f919191d8b4",
+  secret: "3c2243e73f4e4947ad29db17ac6dabbb"
 });
+
+///Gets Last 20 tweets and console logs them to the screen 
+function getTweets(){
+  twitterClient.get('statuses/user_timeline', twitterParams, function(error, tweets, response) {
+    if (error) {
+      console.log(error);
+    }else {
+      tweets.forEach(function(el){
+        console.log("=====================================================");
+        console.log("Tweeted at - ", el.created_at);
+      	console.log("Tweet Text - ", el.text);
+      	console.log("=====================================================");
+      });
+    }
+  });
+}
+
+function findSong(query){
+  spotify.search({ type: 'track', 
+                   query: query })
+  .then(function(response) {
+      var items = response.tracks.items;
+      items.forEach(function(item){
+        console.log("=====================================================");
+        var artists = "";
+        item.album.artists.forEach(function(artist){
+          artists += artist.name + " ";
+        });
+        console.log("Artists: ", artists)
+        console.log("Album Name: ", item.album.name);
+        console.log("Song Name: ", item.name);
+        console.log("Preview it at: ", item.preview_url);
+        console.log("=====================================================");
+      });
+  })
+  .catch(function(err) {
+      console.log(err);
+  });
+}
+
