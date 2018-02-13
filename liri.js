@@ -15,8 +15,11 @@ var spotify = new Spotify({
 //OMDB variables including Request
 var request = require("request");
 
+//fs File System 
+var fs = require("fs");
+
 ///Gets Last 20 tweets and console logs them to the screen 
-function getTweets(){
+function myTweets(){
   twitterClient.get('statuses/user_timeline', twitterParams, function(error, tweets, response) {
     if (error) {
       console.log(error);
@@ -31,7 +34,8 @@ function getTweets(){
   });
 }
 
-function findSong(query){
+///Finds a song from Spotify API and console logs info. 
+function spotifyThisSong(query){
   spotify.search({ type: 'track', 
                    query: query })
   .then(function(response) {
@@ -54,17 +58,15 @@ function findSong(query){
   });
 }
 
-function findMovie(query){
-  var movieTitle = query;
-  var queryUrl = "http://www.omdbapi.com/?t=" + movieTitle + "&y=&plot=short&apikey=40e9cece";
+///Finds A Movie from OMDB and console logs info. 
+function movieThis(query){
+  query = typeof query == "undefined" || query == "" ? "Mr. Nobody" : query; 
+  var queryUrl = "http://www.omdbapi.com/?t=" + query + "&y=&plot=short&apikey=40e9cece";
   ///Makes Requests to OMDB to get Movie Data
   request(queryUrl, function(error, response, body) {
   
       // If the request is successful
       if (!error && response.statusCode === 200) {
-  
-          // Parse the body of the site and recover just the imdbRating
-          // (Note: The syntax below for parsing isn't obvious. Just spend a few moments dissecting it).
           var movie = JSON.parse(body);
           console.log("=====================================================");
           console.log("Movie Title: ", movie.Title);
@@ -82,3 +84,35 @@ function findMovie(query){
       }
   });
 }
+
+//Uses Read File To Get Commands from text file. 
+function doWhatItSays(){
+	
+	fs.readFile("random.txt", "utf8", function(error, data) {
+	    // If the code experiences any errors it will log the error to the console.
+	    if (error) {
+	        return console.log(error);
+	    }
+	    // Then split it by commas (to make it more readable)
+	    var dataArr = data.split(",");
+	    var command = dataArr[0];
+	    var query = dataArr[1];
+	    ///Depending on command execute the different functions 
+	    switch(command){
+	    	case "my-tweets": 
+	    		myTweets();
+	    		break; 
+	    	case "spotify-this-song": 
+	    		spotifyThisSong(query);
+	    		break; 
+	    	case "movie-this": 
+	    		movieThis(query);
+	    		break; 
+	    	default : 
+	    		console.log("I'm sorry we can't do that.");
+	    }
+	});
+}
+
+doWhatItSays();
+//findMovie("");
