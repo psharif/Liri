@@ -12,6 +12,11 @@ var spotify = new Spotify({
   secret: "3c2243e73f4e4947ad29db17ac6dabbb"
 });
 
+//OMDB variables including Request
+var request = require("request");
+var movieTitle = "";
+var queryUrl = "http://www.omdbapi.com/?t=" + movieTitle + "&y=&plot=short&apikey=40e9cece";
+
 ///Gets Last 20 tweets and console logs them to the screen 
 function getTweets(){
   twitterClient.get('statuses/user_timeline', twitterParams, function(error, tweets, response) {
@@ -51,3 +56,32 @@ function findSong(query){
   });
 }
 
+function findMovie(query){
+  movieTitle = query;
+  ///Makes Requests to OMDB to get Movie Data
+  request(queryUrl, function(error, response, body) {
+  
+      // If the request is successful
+      if (!error && response.statusCode === 200) {
+  
+          // Parse the body of the site and recover just the imdbRating
+          // (Note: The syntax below for parsing isn't obvious. Just spend a few moments dissecting it).
+          var movie = JSON.parse(body);
+          console.log("=====================================================");
+          console.log("Movie Title: ", movie.Title);
+          console.log("Year: ", movie.Year);
+          console.log("IMDB Rating: ", movie.Ratings[0].Value); 
+          console.log("Rotten Tomatoes: ", movie.Ratings[1].Value); 
+          console.log("Production Country: ", movie.Country);
+          console.log("Language: ", movie.Language);
+          console.log("Plot: ", movie.Plot);
+          console.log("Actors: ", movie.Actors);
+          console.log("=====================================================");
+      }
+      else{
+        console.log(error);
+      }
+  });
+}
+
+findMovie("Garfield");
