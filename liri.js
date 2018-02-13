@@ -15,8 +15,11 @@ var spotify = new Spotify({
 //OMDB variables including Request
 var request = require("request");
 
-//fs File System 
+//fs File System + read Line Packages
 var fs = require("fs");
+var readline = require("readline");
+
+
 
 ///Gets Last 20 tweets and console logs them to the screen 
 function myTweets(){
@@ -86,33 +89,34 @@ function movieThis(query){
 }
 
 //Uses Read File To Get Commands from text file. 
+//Uses lineReader to get line for line. 
+//You can use one text file to do multiple commands. 
 function doWhatItSays(){
-	
-	fs.readFile("random.txt", "utf8", function(error, data) {
-	    // If the code experiences any errors it will log the error to the console.
-	    if (error) {
-	        return console.log(error);
-	    }
-	    // Then split it by commas (to make it more readable)
-	    var dataArr = data.split(",");
-	    var command = dataArr[0];
-	    var query = dataArr[1];
-	    ///Depending on command execute the different functions 
-	    switch(command){
-	    	case "my-tweets": 
-	    		myTweets();
-	    		break; 
-	    	case "spotify-this-song": 
-	    		spotifyThisSong(query);
-	    		break; 
-	    	case "movie-this": 
-	    		movieThis(query);
-	    		break; 
-	    	default : 
-	    		console.log("I'm sorry we can't do that.");
-	    }
-	});
-}
 
-doWhatItSays();
-//findMovie("");
+  var lineReader = readline.createInterface({
+    input: fs.createReadStream('random.txt')
+  })
+
+  lineReader.on("line", function(line){
+    if(line !== ""){
+      var lineArr = line.split(",");
+      var command = lineArr[0];
+      var query = lineArr[1];
+
+      switch(command){
+        case "my-tweets": 
+          myTweets();
+          break; 
+        case "spotify-this-song": 
+          spotifyThisSong(query);
+          break; 
+        case "movie-this":
+          console.log("Movie This was called"); 
+          movieThis(query);
+          break; 
+        default : 
+          console.log("I'm sorry we can't do that.");
+      }
+    }
+  });
+}
