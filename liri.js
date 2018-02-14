@@ -55,8 +55,7 @@ function findSong(query){
 }
 
 function findMovie(query){
-  var movieTitle = query;
-  var queryUrl = "http://www.omdbapi.com/?t=" + movieTitle + "&y=&plot=short&apikey=40e9cece";
+  var queryUrl = "http://www.omdbapi.com/?t=" + query + "&y=&plot=short&apikey=40e9cece";
   ///Makes Requests to OMDB to get Movie Data
   request(queryUrl, function(error, response, body) {
   
