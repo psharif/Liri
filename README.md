@@ -10,7 +10,26 @@ Command Line Node App to emulate Siri, that requests information from twitter ap
 ## Ways to run 
  
  You Can enter your commands into the command line along with the node liri.js like so:
+ 
  ![cli snippet](/README_images/commandLine.png)
 
+ Or You can just run **node liri.js** and you will prompted with inquirer prompts like this: 
 
+  ![inquier prompts](/README_images/Inquirer_Image.png)
 
+## Commands 
+
+ * **spotify-this-song<song_name>** 
+   Will print the results for a song name the user inputs into command line or inquirer prompts from spotify API. 
+
+   ![spotify this](/README_images/spotify-this.png)
+ * **movie-this<movie_name>** 
+	Will print the results for a movie title the user inputs into command line or inquirer prompts from OMDB API. 
+
+	![movie this](/README_images/movie-this.png)
+ * my-tweets: 
+ 	Will print out the last 20 tweets from my alias twitter account using Twitter API.
+
+ 	![my tweets](/README_images/my-tweets.png)
+ * do-what-it-says
+ 	Will read a file called random.txt and print execute the commands in the file. 
