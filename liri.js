@@ -39,8 +39,8 @@ function myTweets(){
         data += ""  
         +"====================================================="
         + "\nTweeted at - " + el.created_at
-      	+ "\nTweet Text - " + el.text
-      	+ "\n=====================================================\n";
+        + "\nTweet Text - " + el.text
+        + "\n=====================================================\n";
       });
       console.log(data);
       logData(data);
