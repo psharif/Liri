@@ -92,7 +92,6 @@ function movieThis(query){
 //Uses lineReader to get line for line. 
 //You can use one text file to do multiple commands. 
 function doWhatItSays(){
-
   var lineReader = readline.createInterface({
     input: fs.createReadStream('random.txt')
   })
@@ -119,4 +118,29 @@ function doWhatItSays(){
       }
     }
   });
+}
+
+if (process.argv.length > 2){
+    //var lineArr = line.split(",");
+      var command = process.argv[2];
+      var query = process.argv[3];
+      console.log(command);
+      console.log(query);
+
+      switch(command){
+        case "my-tweets": 
+          myTweets();
+          break; 
+        case "spotify-this-song": 
+          spotifyThisSong(query);
+          break; 
+        case "movie-this":
+          movieThis(query);
+          break; 
+        case "do-what-it-says":
+          doWhatItSays();
+          break;
+        default : 
+          console.log("I'm sorry we can't do that.");
+      }
 }
