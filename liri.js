@@ -57,7 +57,8 @@ function spotifyThisSong(query){
       commands += "Command used: spotify-this-song " + query + "\n"; 
       var data = commands;
       var items = response.tracks.items;
-      
+ 
+     
       items.forEach(function(item){
         var artists = "";
         item.album.artists.forEach(function(artist){
@@ -154,10 +155,64 @@ function logData(data){
   });
 }
 
+
+function keepGoing(){
+  inquirer.prompt([
+    {
+      type: "list", 
+      message:"Would you like to enter A New Command?", 
+      choices:["yes", "no"],
+      name: "keepGoing"
+    }
+  ]).then(function(answers) {
+    if(answers.keepGoing == "yes"){
+      commandChoice();
+    }
+  });
+}
+
+function commandChoice(){
+  inquirer.prompt([
+    {
+      type: "list", 
+      message:"Choose A Command To to Execute\n", 
+      choices:["my-tweets: Shows My Last 20 tweets", 
+               "spotify-this-song: Prints info about a song from spotify must enter song name", 
+               "movie-this: Prints info about a movie, must enter movie title", 
+               "do-what-it-says: Reads from a file called random.txt and executes commands"
+              ],
+      name: "commandPrompt"
+    }
+  ]).then(function(answers) {
+    switch(answers.commandPrompt){
+      case "my-tweets: Shows My Last 20 tweets": 
+        getQuery("tweet", myTweets);
+        break; 
+      case "spotify-this-song: Prints info about a song from spotify must enter song name": 
+        getQuery("song name", spotifyThisSong);
+        break; 
+      case "movie-this: Prints info about a movie, must enter movie title":
+        getQuery("movie title", movieThis);
+        break; 
+      case "do-what-it-says: Reads from a file called random.txt and executes commands":
+        getQuery("tweet", doWhatItSays);
+        break;
+      default : 
+        console.log("I'm sorry we can't do that.");
+    }
+  });
+}
+
 //If the user chose spotify-this-song or movie-this they need to enter 
 //A movie title or song name. Prompt them for it. 
 //Then use .call to call either spotifyThisSong or movieThis with the users answer.
 function getQuery(query, commandFunction){
+  if (query == "tweet" || query =="doIt"){
+     commandFunction.call(this);
+     keepGoing();
+     console.log("\n\n");
+     return;
+  }
    inquirer.prompt([
     {
       type: "input", 
@@ -168,8 +223,12 @@ function getQuery(query, commandFunction){
     if (answers.getQuery !==""){
       commandFunction.call(this, answers.getQuery);
     }
+  }).then(function(answers){
+    keepGoing();
+    console.log("\n\n");
   });
 }
+
 
 ///Checks If the user entered other arguments into the command Line 
 ///If they did execute the command. Othwerwise Go to Inquirer
@@ -201,33 +260,5 @@ if (process.argv.length > 2){
       }
 }
 else{
-  inquirer.prompt([
-    {
-      type: "list", 
-      message:"Choose A Command To to Execute\n", 
-      choices:["my-tweets: Shows My Last 20 tweets", 
-               "spotify-this-song: Prints info about a song from spotify must enter song name", 
-               "movie-this: Prints info about a movie, must enter movie title", 
-               "do-what-it-says: Reads from a file called random.txt and executes commands"
-              ],
-      name: "commandPrompt"
-    }
-  ]).then(function(answers) {
-    switch(answers.commandPrompt){
-      case "my-tweets: Shows My Last 20 tweets": 
-        myTweets();
-        break; 
-      case "spotify-this-song: Prints info about a song from spotify must enter song name": 
-        getQuery("song name", spotifyThisSong);
-        break; 
-      case "movie-this: Prints info about a movie, must enter movie title":
-        getQuery("movie title", movieThis);
-        break; 
-      case "do-what-it-says: Reads from a file called random.txt and executes commands":
-        doWhatItSays();
-        break;
-      default : 
-        console.log("I'm sorry we can't do that.");
-    }
-  });
+  commandChoice();
 }
