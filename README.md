@@ -32,4 +32,10 @@ Command Line Node App to emulate Siri, that requests information from twitter ap
 
  	![my tweets](/README_images/my-tweets.png)
  * do-what-it-says
- 	Will read a file called random.txt and print execute the commands in the file. 
+ 	Will read a file called random.txt and print execute the commands in the file.
+     
+## Notes About Using
+
+If the user decides to use the inquirer to run the commands. It will ask the user if they want to enter more commands, but it might show before the results for each command are printed. Just press up or down on the arrow keys and the prompt will show below the printed results.
+
+![keep Going Prompt](/README_images/keepGoingPrompt.png)

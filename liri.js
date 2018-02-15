@@ -1,4 +1,3 @@
-
 ///Twitter API Variables 
 var Twitter = require("twitter");
 var twitterKeys = require("./keys.js");
@@ -115,6 +114,25 @@ function movieThis(query){
       }
   });
 }
+///Switch Statement To Check which command a user wants to do.
+function switchCommand(command, query){
+  switch(command){
+    case "my-tweets": 
+      myTweets();
+      break; 
+    case "spotify-this-song":
+      spotifyThisSong(query);
+      break; 
+    case "movie-this":
+      movieThis(query);
+      break; 
+    case "do-what-it-says":
+      doWhatItSays();
+      break;
+    default : 
+      console.log("I'm sorry we can't do that.");
+  }
+}
 
 //Uses Read File To Get Commands from text file. 
 //Uses lineReader to get line for line. 
@@ -130,23 +148,12 @@ function doWhatItSays(){
       var command = lineArr[0];
       var query = lineArr[1];
       
-      switch(command){
-        case "my-tweets": 
-          myTweets();
-          break; 
-        case "spotify-this-song": 
-          spotifyThisSong(query);
-          break; 
-        case "movie-this":
-          movieThis(query);
-          break; 
-        default : 
-          console.log("I'm sorry we can't do that.");
-      }
+      switchCommand(command, query);
     }
   });
 }
 
+//Logs the Data to a log.txt file 
 function logData(data){
   fs.appendFile('log.txt', data, function(err){
     if (err){
@@ -155,7 +162,7 @@ function logData(data){
   });
 }
 
-
+//Prompts the user to see if they want to enter more commands 
 function keepGoing(){
   inquirer.prompt([
     {
@@ -171,6 +178,7 @@ function keepGoing(){
   });
 }
 
+///Checks which command the user wants to use 
 function commandChoice(){
   inquirer.prompt([
     {
@@ -242,22 +250,7 @@ if (process.argv.length > 2){
       }
       query += process.argv[process.argv.length-1];
 
-      switch(command){
-        case "my-tweets": 
-          myTweets();
-          break; 
-        case "spotify-this-song":
-          spotifyThisSong(query);
-          break; 
-        case "movie-this":
-          movieThis(query);
-          break; 
-        case "do-what-it-says":
-          doWhatItSays();
-          break;
-        default : 
-          console.log("I'm sorry we can't do that.");
-      }
+      switchCommand(command, query);
 }
 else{
   commandChoice();
